@@ -1,3 +1,4 @@
+#file for practice cursor commit
 from openai import OpenAI
 
 client = OpenAI(

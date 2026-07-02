@@ -138,3 +138,4 @@ while True:
         break
 
     print(analyze(text))
+    #test
