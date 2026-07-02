@@ -30,7 +30,7 @@ def analyze(text):
 
 
 while True:
-    text = input("输入消费（q退出）：")
+    text = input("输入消费payment（q退出）：")
 
     if text == "q":
         break
