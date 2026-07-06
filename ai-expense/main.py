@@ -47,7 +47,7 @@ while True:
         amount=0,  # 先占位（后面我们再做金额识别）
         category=data["category"],
         description=data["description"],
-        created_at="2026-07-06",
+        created_at="2026-07-07",
     )
 
     print("✔ 已保存到数据库")
