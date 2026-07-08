@@ -6,7 +6,21 @@ from datetime import datetime
 from ai import analyze
 from database import save_expense
 
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi import Request
+
+templates = Jinja2Templates(directory="templates")
+
 app = FastAPI()
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request
+        }
+    )
 
 class ExpenseRequest(BaseModel):
     text: str
