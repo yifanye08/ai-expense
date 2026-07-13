@@ -1,18 +1,20 @@
 # file for practice cursor commit
 from fastapi import FastAPI
-from pydantic import BaseModel
+# from pydantic import BaseModel
 from datetime import datetime
 
 from ai import analyze
-from database import save_expense
+from database import save_expense,get_all_expenses,stats_expenses
 
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Request
-
-templates = Jinja2Templates(directory="templates")
+from fastapi import Form
 
 app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
+#这是路由
 @app.get("/", response_class=HTMLResponse)
 def home(request: Request):
     return templates.TemplateResponse(
@@ -21,17 +23,40 @@ def home(request: Request):
             "request": request
         }
     )
+#这是路由
+@app.get("/expenses", response_class=HTMLResponse)
+def expense_list(request: Request):
+    #用database.py里的函数get_all_expense 把从数据库sqlite3里的数据赋到expenses里
+    expenses = get_all_expenses()
+    #expenses里的数据送到到expenses.html页面里
+    return templates.TemplateResponse(
+        "expenses.html",
+        {
+            "request": request,
+            #左边 "expenses" 是模板里使用的变量名，右边 expenses 是 Python 里的变量
+            "expenses": expenses
+            
+        }
+    )   
 
-class ExpenseRequest(BaseModel):
-    text: str
-
-@app.get("/")
-def home():
-    return {"message": "AI Expense API is running"}
+@app.get("/stats", response_class=HTMLResponse)
+def stats_sum(request: Request):
+    #用database.py里的函数get_all_expense 把从数据库sqlite3里的数据赋到expenses里
+    category_stats = stats_expenses()
+    return templates.TemplateResponse(
+        "stats.html",
+        {
+            "request": request,
+            "category_stats": category_stats
+        }
+    )   
+# class ExpenseRequest(BaseModel):
+#     text: str
 
 @app.post("/expense")
-def create_expense(req: ExpenseRequest):
-    data = analyze(req.text)
+def create_expense(text: str = Form(...)):
+    
+    data = analyze(text)
 
     save_expense(
         amount=data["amount"],

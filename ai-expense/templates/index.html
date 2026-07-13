@@ -5,23 +5,31 @@
     <title>AI Expense</title>
 </head>
 
+
 <body>
 
-<h1>AI Expense Assistant</h1>
+<h1>
+AI Expense Assistant
+</h1>
+<p><a href="/expenses">查看历史账单</a></p>
 
-<form>
+<form action="/expense" method="post">
 
-<input
-type="text"
-placeholder="请输入消费">
+<input 
+    type="text"
+    name="text"
+    placeholder="请输入消费，例如：吃饭30元"
+    style="width:300px;"
+>
 
-<button>
 
+<button type="submit">
 AI记账
-
 </button>
 
+
 </form>
+
 
 </body>
 

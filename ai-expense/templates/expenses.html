@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Expense history</title>
+</head>
+
+
+<body>
+
+<h1>Expense history</h1>
+<p><a href="/">返回记账</a></p>
+<table border="1">
+    <tr>
+        <th>日期</th>
+        <th>金额</th>
+        <th>分类</th>
+        <th>描述</th>
+    </tr>
+<!-- Jinja2 的循环语法 -->
+    {% for expense in expenses %}
+
+    <tr>
+
+        <td>{{ expense.created_at }}</td>
+
+        <td>{{ expense.amount }}</td>
+
+        <td>{{ expense.category }}</td>
+
+        <td>{{ expense.description }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+</body>
+
+</html>
