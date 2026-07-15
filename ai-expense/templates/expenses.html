@@ -16,6 +16,7 @@
         <th>金额</th>
         <th>分类</th>
         <th>描述</th>
+        <th>操作</th>
     </tr>
 <!-- Jinja2 的循环语法 -->
     {% for expense in expenses %}
@@ -29,7 +30,14 @@
         <td>{{ expense.category }}</td>
 
         <td>{{ expense.description }}</td>
-
+        <td>
+            <a href="/edite/{{ expense.id }}">
+                编辑
+            </a>
+            <a href="/delete/{{ expense.id }}">
+            删除
+            </a>
+        </td>
     </tr>
 
     {% endfor %}

@@ -1,15 +1,13 @@
 # file for practice cursor commit
-from fastapi import FastAPI
-# from pydantic import BaseModel
+from fastapi import FastAPI,Request,Form
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.templating import Jinja2Templates
+
 from datetime import datetime
 
-from ai import analyze
-from database import save_expense,get_all_expenses,stats_expenses
+from app.services.ai_service import analyze
+from app.database.db import save_expense,get_all_expenses,stats_expenses,delete_expense,edite_expense
 
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from fastapi import Request
-from fastapi import Form
 
 app = FastAPI()
 
@@ -69,3 +67,22 @@ def create_expense(text: str = Form(...)):
         "status": "success",
         "data": data
     }
+
+@app.get("/delete/{expense_id}")
+def delete(expense_id: int):
+
+    delete_expense(expense_id)
+
+    return RedirectResponse(
+        "/expenses",
+        status_code=303
+    )
+
+@app.get("/edite/{expense_id},{amount},{category},{description}")
+def edite(expense_id: int,amount:dou,category:chr,description:chr):
+
+    edite_expense(expense_id,amount,category,description)
+    return RedirectResponse(
+        "/expenses",
+        status_code=303
+    )
