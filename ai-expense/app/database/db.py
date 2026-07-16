@@ -1,5 +1,6 @@
 #这个文件里专门写函数
 import sqlite3
+from unicodedata import category
 
 def save_expense(amount, category, description, created_at):
     conn = sqlite3.connect("expense.db")
@@ -86,28 +87,68 @@ def delete_expense(expense_id):
     conn.close()
     print("deleted successfully")
 
-def edite_expense(expense_id,amount,category,description):
+# def get_expense(expense_id):
+#     conn = sqlite3.connect("expense.db")
+#     #游标（中文翻译）
+#     cursor =conn.cursor()
+
+#     cursor.execute("""
+#         SELECT id,amount,category,description,created_at FROM expense
+#         WHERE id = ?
+#         """,(expense_id)
+#     )
+#     #拿到查询结果
+#     expense = cursor.fetchone()
+#     #返回查询结果
+#     return expense
+
+#     conn.commit()
+#     conn.close()
+
+def get_expense(expense_id):
+    conn = sqlite3.connect("expense.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id, amount, category, description, created_at
+        FROM expense
+        WHERE id = ?
+    """, (expense_id,))
+
+    row = cursor.fetchone()
+
+    conn.close()
+
+    if row is None:
+        return None
+
+    return {
+        "id": row[0],
+        "amount": row[1],
+        "category": row[2],
+        "description": row[3],
+        "created_at": row[4]
+    }
+
+def update_expense(expense_id,amount,category,description):
     conn = sqlite3.connect("expense.db")
     #游标（中文翻译）
     cursor =conn.cursor()
 
-    cursor.execute(
-        """
+    cursor.execute("""
         UPDATE expense
         SET amount = ?,
             category =?,
-            description =?,
+            description =?
         WHERE id =?    
-        """,
-        (
-            amount,
-            category,
-            description,
-            expense_id
-        )
+    """, (
+        amount,
+        category,
+        description,
+        expense_id
+         )
     )
 
     conn.commit()
     conn.close()
-    print("expense edited successfully")
 

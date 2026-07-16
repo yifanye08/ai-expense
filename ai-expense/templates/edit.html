@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>编辑支出</title>
+</head>
+
+<body>
+
+<h1>编辑支出</h1>
+
+<form action="/expenses/{{ expense.id }}/edit" method="post">
+
+    <p>
+        金额：
+        <input
+            type="number"
+            name="amount"
+            value="{{ expense.amount }}"
+        >
+    </p>
+
+    <p>
+        分类：
+        <input
+            type="text"
+            name="category"
+            value="{{ expense.category }}"
+        >
+    </p>
+
+    <p>
+        描述：
+        <input
+            type="text"
+            name="description"
+            value="{{ expense.description }}"
+        >
+    </p>
+
+    <button type="submit">
+        保存
+    </button>
+
+</form>
+
+</body>
+</html>

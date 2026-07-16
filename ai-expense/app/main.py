@@ -1,12 +1,13 @@
 # file for practice cursor commit
+from cgitb import text
 from fastapi import FastAPI,Request,Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 
 from datetime import datetime
 
-from app.services.ai_service import analyze
-from app.database.db import save_expense,get_all_expenses,stats_expenses,delete_expense,edite_expense
+from .services.ai_service import analyze
+from .database.db import save_expense,get_all_expenses,stats_expenses,delete_expense,get_expense,update_expense
 
 
 app = FastAPI()
@@ -78,10 +79,34 @@ def delete(expense_id: int):
         status_code=303
     )
 
-@app.get("/edite/{expense_id},{amount},{category},{description}")
-def edite(expense_id: int,amount:dou,category:chr,description:chr):
+@app.get("/expenses/{expense_id}/edit")
+def edite(expense_id: int,request:Request):
 
-    edite_expense(expense_id,amount,category,description)
+    expense = get_expense(expense_id)
+
+    return templates.TemplateResponse(
+        "edit.html",
+        {
+            "request":request,
+            "expense":expense
+        }
+    )
+
+@app.post("/expenses/{expense_id}/edit")
+def edit_expense(
+    expense_id: int,
+    amount: float = Form(...),
+    category: str = Form(...),
+    description: str = Form(...)
+):
+
+    update_expense(
+        expense_id,
+        amount,
+        category,
+        description
+    )
+
     return RedirectResponse(
         "/expenses",
         status_code=303
